@@ -115,16 +115,16 @@ public:
 	void HeroJump(int &key)
 	{
 
-		if (!jumpCheck && key == 1 && hero.GetHeadY() > 13 * Scale)
+		if (!jumpCheck && key == 1 && hero.GetHY() > 13 * Scale)
 		{
 			hero.MoveHero(jumptemp);
-			if (hero.GetHeadY() <= 13 * Scale) { jumpCheck = true;}
+			if (hero.GetHY() <= 13 * Scale) { jumpCheck = true;}
 		}
 
-		else if (jumpCheck && hero.GetLegsY() < (screen.GetM()-2)*Scale)
+		else if (jumpCheck && hero.GetLY() < (screen.GetM()-2)*Scale)
 		{
 			hero.MoveHero(-jumptemp);
-			if (hero.GetLegsY() >= (screen.GetM() - 2)*Scale)
+			if (hero.GetLY() >= (screen.GetM() - 2)*Scale)
 			{
 				jumpCheck = false;
 				key = 0;
@@ -132,6 +132,16 @@ public:
 		}
 	}
 
-
+	void LooseCheck(Hero h, int key)
+	{
+		bool loose = false;
+		for (int i = 0; i < mobCol; i++)
+		{
+			loose = mobs[i].Loose(h);
+			if (loose) exit(0);
+			loose = birds[i].Loose(h, key);
+			if (loose) exit(0);
+		}
+	}
 
 };

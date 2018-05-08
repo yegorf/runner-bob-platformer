@@ -8,21 +8,44 @@
 #include "Queue.h"
 #include "Cloud.h"
 #include "Game.h"
+#include <time.h>
 using namespace sf;
 
+#define scale 35
 int key=0;
-int barTime = 100;
-int cloudTime = 250;
+
+int tBar = 100;
+int barTime = tBar;
+int tCloud = 250;
+int cloudTime = tCloud;
 
 Game game;
 
 void Tick()
 {
-	int var = 0;
-	if(barTime==100)
+	game.LooseCheck(hero, key);
+	int var = rand()%2;
+	int vartime = rand() % 4;
+
+	if(barTime== tBar)
 	{
 		game.AddBarrier(var);
 		barTime = 0;
+		switch (vartime)
+		{
+		case 0:
+			tBar = 125;
+			break;
+		case 1:
+			tBar = 150;
+			break;
+		case 2:
+			tBar = 175;
+			break;
+		case 3:
+			tBar = 200;
+			break;
+		}
 	}
 	game.CheckEnd();
 	game.HeroJump(key);
@@ -34,7 +57,7 @@ void Tick()
 void CloudTick()
 {
 	
-	if (cloudTime == 250)
+	if (cloudTime == tCloud)
 	{
 		game.AddBarrier(2);
 		cloudTime = 0;
@@ -45,6 +68,7 @@ void CloudTick()
 
 int main()
 {
+	srand(time(0));
 	RenderWindow window(VideoMode(screen.GetW(), screen.GetH()), "Runner");
 
 	Clock clockMove;

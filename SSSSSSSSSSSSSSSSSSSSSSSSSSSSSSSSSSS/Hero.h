@@ -8,11 +8,10 @@ int scale = 35;
 class Hero
 {
 private:
-	int x;
-	int y;
-	Cell head;
-	Cell legs;
-
+	float hx;
+	float hy;
+	float lx;
+	float ly;
 
 public:
 
@@ -23,28 +22,28 @@ public:
 
 	void Null()
 	{
-		head.SetX(screen.GetScale());
-		head.SetY((screen.GetM() - 3)*screen.GetScale());
-		legs.SetX(screen.GetScale());
-		legs.SetY((screen.GetM() - 2)*screen.GetScale());
+		hx = scale;
+		hy = (screen.GetM() - 3)*screen.GetScale();
+		lx = screen.GetScale();
+		ly = (screen.GetM() - 2)*screen.GetScale();
 	}
 
 	void MoveHero(float temp)
 	{
-		head.SetY(head.GetY() - temp);
-		legs.SetY(legs.GetY() - temp);
+		hy -= temp;
+		ly -= temp;
 	}
 
 	void Draw(Sprite spriteHead, Sprite spriteLegs, RenderWindow &window)
 	{
-		spriteHead.setPosition(head.GetX(), head.GetY());
+		spriteHead.setPosition(hx, hy);
 		window.draw(spriteHead);
-		spriteLegs.setPosition(legs.GetX(), legs.GetY());
+		spriteLegs.setPosition(lx, ly);
 		window.draw(spriteLegs);
 	}
 
-	float GetX() { return head.GetX(); }
-	float GetHeadY() { return head.GetY(); }
-	float GetLegsY() { return legs.GetY(); }
+	float GetX() { return hx; }
+	float GetHY() { return hy; }
+	float GetLY() { return ly; }
 
 }hero;

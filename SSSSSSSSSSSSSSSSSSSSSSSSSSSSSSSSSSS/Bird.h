@@ -26,5 +26,17 @@ public:
 	{
 		x -= temp;
 	}
+
+	bool Loose(Hero h, int key)
+	{
+		if (
+			x <= h.GetX() + Scale
+			&& x + Scale >= h.GetX()
+			&& y - Scale <= h.GetLY()
+			&& key!=2)
+			return true;
+		else return false;
+	}
+
 };
 

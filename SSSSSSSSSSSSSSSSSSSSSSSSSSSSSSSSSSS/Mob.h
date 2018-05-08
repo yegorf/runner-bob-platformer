@@ -24,6 +24,16 @@ public:
 		spriteMob.setPosition(x, y);
 		window.draw(spriteMob);
 	}
+
+	bool Loose(Hero h)
+	{
+		if (
+			x <= h.GetX() + Scale
+			&& x + Scale >= h.GetX()
+			&& y - Scale <= h.GetLY())
+			return true;
+		else return false;
+	}
 };
 
 
