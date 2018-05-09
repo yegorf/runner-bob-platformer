@@ -1,22 +1,21 @@
 #pragma once
-#include "Cell.h"
 
-class Mob: public Barrier
+class Tree : public Barrier
 {
 
 public:
 
-	Mob() 
+	Tree()
 	{
 		Null();
-		h = 35;
+		h = 70;
 		w = 35;
 	}
 
 	void Null()
 	{
 		x = 29 * Scale;
-		y = 18 * Scale;
+		y = 17 * Scale;
 	}
 
 	void Move(float temp)
@@ -30,16 +29,13 @@ public:
 		window.draw(spriteMob);
 	}
 
-	bool Loose(Hero h)
+	bool Loose(Hero hero)
 	{
 		if (
-			x <= h.GetX() + Scale
-			&& x + Scale >= h.GetX()
-			&& y - Scale <= h.GetLY())
+			x <= hero.GetX() + w
+			&& x + w >= hero.GetX()
+			&& y - h/2 <= hero.GetLY())
 			return true;
 		else return false;
 	}
 };
-
-
-

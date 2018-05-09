@@ -1,13 +1,15 @@
 #pragma once
 #include "Barrier.h"
 
-bool h = false;
+bool hh = false;
 class Cloud: public Barrier
 {
 public:
 
 	Cloud()
 	{
+		h = 140;
+		w = 175;
 	}
 
 	void Null()

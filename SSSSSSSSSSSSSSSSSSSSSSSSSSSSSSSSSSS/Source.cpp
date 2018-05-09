@@ -1,4 +1,5 @@
 #include <SFML\Graphics.hpp>
+#include <Windows.h>
 #include <iostream>
 #include "Screen.h"
 #include "Cell.h"
@@ -7,50 +8,56 @@
 #include "Mob.h"
 #include "Queue.h"
 #include "Cloud.h"
+#include "Tree.h"
 #include "Game.h"
 #include <time.h>
+#include <string>
+#include <sstream>
 using namespace sf;
+using namespace std;
 
 #define scale 35
 int key=0;
+bool loose = false;
 
 int tBar = 100;
 int barTime = tBar;
-int tCloud = 250;
+int tCloud = 150;
 int cloudTime = tCloud;
 
-Game game;
+Game *game;
 
 void Tick()
 {
-	game.LooseCheck(hero, key);
-	int var = rand()%2;
+	loose = game->LooseCheck(key);
+	int var = rand()%3;
 	int vartime = rand() % 4;
 
 	if(barTime== tBar)
 	{
-		game.AddBarrier(var);
+		game->AddBarrier(var);
 		barTime = 0;
 		switch (vartime)
 		{
 		case 0:
-			tBar = 125;
+			tBar = 50;
 			break;
 		case 1:
-			tBar = 150;
+			tBar = 75;
 			break;
 		case 2:
-			tBar = 175;
+			tBar = 100;
 			break;
 		case 3:
-			tBar = 200;
+			tBar = 125;
 			break;
 		}
 	}
-	game.CheckEnd();
-	game.HeroJump(key);
-	game.MoveAll();
+	game->CheckEnd();
+	game->HeroJump(key);
+	game->MoveAll();
 	barTime++;
+	game->ScoreIteration();
 
 }
 
@@ -59,8 +66,9 @@ void CloudTick()
 	
 	if (cloudTime == tCloud)
 	{
-		game.AddBarrier(2);
+		game->AddBarrier(3);
 		cloudTime = 0;
+		game->Faster();
 	}
 	cloudTime++;
 }
@@ -70,6 +78,19 @@ int main()
 {
 	srand(time(0));
 	RenderWindow window(VideoMode(screen.GetW(), screen.GetH()), "Runner");
+	game = new Game();
+	unsigned maxScore = 0;
+
+	Font font;
+	font.loadFromFile("a_Alterna.ttf");
+	Text textScore("", font, 20);
+	textScore.setColor(Color::Black);
+	textScore.setPosition(100, 20);
+
+	Text textMaxScore("", font, 20);
+	textMaxScore.setColor(Color::Black);
+	textMaxScore.setPosition(400, 20);
+
 
 	Clock clockMove;
 	float timer = 0;
@@ -102,6 +123,10 @@ int main()
 	tmob.loadFromFile("images/mob.bmp");
 	Sprite spriteMob(tmob);
 
+	Texture ttree;
+	ttree.loadFromFile("images/tree.bmp");
+	Sprite spriteTree(ttree);
+
 	Texture tcloud;
 	tcloud.loadFromFile("images/cloud.bmp");
 	Sprite spriteCloud(tcloud);
@@ -133,6 +158,14 @@ int main()
 		if (timer > delay) { timer = 0; Tick(); }
 		if (timerCloud > delayCloud) { timerCloud = 0; CloudTick(); }
 
+		if (loose)
+		{
+			if (game->GetScore() > maxScore) { maxScore = game->GetScore(); }
+			delete game;
+			Sleep(1000);
+			game = new Game;
+		}
+
 		//DRAW
 		window.clear();
 
@@ -147,8 +180,17 @@ int main()
 			}
 		}
 
-		hero.Draw(spriteHead, spriteLegs, window);
-		game.DrawAll(spriteMob, spriteBird, spriteCloud, window);
+		game->DrawAll(spriteHead, spriteLegs, spriteMob, spriteTree, spriteBird, spriteCloud, window);
+		
+		ostringstream score;
+		score << game->GetScore();
+		textScore.setString("Current score: " + score.str());
+		window.draw(textScore);
+
+		ostringstream max_score;
+		max_score << maxScore;
+		textMaxScore.setString("Max score: " + max_score.str());
+		window.draw(textMaxScore);
 
 		window.display();
 	}

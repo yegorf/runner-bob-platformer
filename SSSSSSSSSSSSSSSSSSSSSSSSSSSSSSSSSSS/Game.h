@@ -4,27 +4,50 @@
 class Game
 {
 private:
-	double mobSpeed = 3;
-	double cloudSpeed = 1;
-	float jumptemp = 3;
+	double mobSpeed = 8;
+	double cloudSpeed = 2.5;
+	float jumptemp = 9;
 	bool jumpCheck = false;
 
+	Hero hero;
 	Cloud *clouds;
 	Bird *birds;
 	Mob *mobs;
+	Tree *trees;
 
 	unsigned cloudCol = 10;
 	unsigned birdCol = 10;
 	unsigned mobCol = 10;
+	unsigned score = 0;
 
 public:
+
+	void Faster()
+	{
+		mobSpeed += 0.2;
+		cloudSpeed += 0.02;
+	}
 
 	Game()
 	{
 		clouds = new Cloud[cloudCol];
 		birds = new Bird[birdCol];
 		mobs = new Mob[mobCol];
+		trees = new Tree[mobCol];
 	}
+
+	~Game()
+	{
+		delete[] clouds;
+		delete[] birds;
+		delete[] mobs;
+		delete[] trees;
+	}
+
+	void ScoreIteration() { score++; }
+	void SetScore(unsigned s) { score = s; }
+	unsigned GetScore() { return score; }
+
 
 	void MoveAll()
 	{
@@ -37,6 +60,10 @@ public:
 			if (mobs[i].GetUse())
 			{
 				mobs[i].Move(mobSpeed);
+			}
+			if (trees[i].GetUse())
+			{
+				trees[i].Move(mobSpeed);
 			}
 		}
 
@@ -53,18 +80,22 @@ public:
 	{
 		for (int i = 0; i < birdCol; i++)
 		{
-			if (birds[i].GetX() <= 0) { birds[i].SetUse(false); }
-			if (mobs[i].GetX() <= 0) { mobs[i].SetUse(false); }
-			if (clouds[i].GetX() <= 0) { clouds[i].SetUse(false); }
+			if (birds[i].GetX()+birds[i].GetW() <= 0) { birds[i].SetUse(false); }
+			if (mobs[i].GetX()+ mobs[i].GetW() <= 0) { mobs[i].SetUse(false); }
+			if (trees[i].GetX() + trees[i].GetW() <= 0) { trees[i].SetUse(false); }
+			if (clouds[i].GetX()+ clouds[i].GetW() <= 0) { clouds[i].SetUse(false); }
 		}
 	}
 
-	void DrawAll(Sprite s_mob, Sprite s_bird, Sprite s_cloud, RenderWindow &window)
+	void DrawAll(Sprite sHead, Sprite sLegs, Sprite s_mob, Sprite sTree, Sprite s_bird, Sprite s_cloud, RenderWindow &window)
 	{
+		hero.Draw(sHead, sLegs, window);
 		for (int i = 0; i < mobCol; i++)
 		{
 			if(mobs[i].GetUse())
 			mobs[i].Draw(s_mob, window);
+			if (trees[i].GetUse())
+				trees[i].Draw(sTree, window);
 			if (birds[i].GetUse())
 			birds[i].Draw(s_bird, window);
 			if (clouds[i].GetUse())
@@ -101,6 +132,17 @@ public:
 		case 2:
 			for (int i = 0; i < mobCol; i++)
 			{
+				if (!trees[i].GetUse())
+				{
+					trees[i].Null();
+					trees[i].SetUse(true);
+					break;
+				}
+			}
+			break;
+		case 3:
+			for (int i = 0; i < mobCol; i++)
+			{
 				if (!clouds[i].GetUse())
 				{
 					clouds[i].Null();
@@ -115,10 +157,10 @@ public:
 	void HeroJump(int &key)
 	{
 
-		if (!jumpCheck && key == 1 && hero.GetHY() > 13 * Scale)
+		if (!jumpCheck && key == 1 && hero.GetHY() > 12 * Scale)
 		{
 			hero.MoveHero(jumptemp);
-			if (hero.GetHY() <= 13 * Scale) { jumpCheck = true;}
+			if (hero.GetHY() <= 12 * Scale) { jumpCheck = true;}
 		}
 
 		else if (jumpCheck && hero.GetLY() < (screen.GetM()-2)*Scale)
@@ -132,16 +174,19 @@ public:
 		}
 	}
 
-	void LooseCheck(Hero h, int key)
+	bool LooseCheck(int key)
 	{
 		bool loose = false;
 		for (int i = 0; i < mobCol; i++)
 		{
-			loose = mobs[i].Loose(h);
-			if (loose) exit(0);
-			loose = birds[i].Loose(h, key);
-			if (loose) exit(0);
+			loose = mobs[i].Loose(hero);
+			if (loose) { return true; }
+			loose = birds[i].Loose(hero, key);
+			if (loose) { return true; }
+			loose = trees[i].Loose(hero);
+			if (loose) { return true; }
 		}
+		return false;
 	}
 
 };

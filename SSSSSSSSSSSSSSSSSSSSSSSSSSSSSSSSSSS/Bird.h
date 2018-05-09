@@ -6,7 +6,9 @@ class Bird: public Barrier
 public:
 
 	Bird()
-	{
+	{		
+		h = 35;
+		w = 35;
 		Null();
 	}
 

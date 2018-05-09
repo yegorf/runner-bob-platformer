@@ -10,6 +10,8 @@ class Barrier
 protected:
 	float x;
 	float y;
+	float h;
+	float w;
 	bool use = false;
 
 public:
@@ -19,6 +21,8 @@ public:
 	float GetX() { return x; }
 	float GetY() { return y; }
 	bool GetUse() { return use; }
+	float GetH() { return h; }
+	float GetW() { return w; }
 
 	virtual void Null() = 0;
 	virtual void Draw(Sprite, RenderWindow&) = 0;

@@ -46,4 +46,4 @@ public:
 	float GetHY() { return hy; }
 	float GetLY() { return ly; }
 
-}hero;
+};
