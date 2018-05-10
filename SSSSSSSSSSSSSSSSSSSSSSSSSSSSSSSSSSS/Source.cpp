@@ -15,6 +15,7 @@
 using namespace sf;
 using namespace std;
 
+Game *game;
 int key=0;
 bool loose = false;
 
@@ -23,10 +24,6 @@ int tBar = 100;
 int barTime = tBar;
 int tCloud = 150;
 int cloudTimee = tCloud;
-
-Game *game;
-
-
 
 void Tick()
 {

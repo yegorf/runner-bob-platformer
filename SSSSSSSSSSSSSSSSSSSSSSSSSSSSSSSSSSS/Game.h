@@ -104,7 +104,7 @@ public:
 	}
 
 	void AddBarrier(int var)
-	{//
+	{
 		switch (var)
 		{
 		case 0:
