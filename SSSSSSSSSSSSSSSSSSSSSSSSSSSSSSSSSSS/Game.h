@@ -4,7 +4,7 @@
 class Game
 {
 private:
-	double mobSpeed = 8;
+	double mobSpeed = 9;
 	double cloudSpeed = 2.5;
 	float jumptemp = 9;
 	bool jumpCheck = false;
@@ -104,7 +104,7 @@ public:
 	}
 
 	void AddBarrier(int var)
-	{
+	{//
 		switch (var)
 		{
 		case 0:
@@ -172,6 +172,11 @@ public:
 				key = 0;
 			}
 		}
+	}
+
+	void HeroDown(int key)
+	{
+		hero.Down(key);
 	}
 
 	bool LooseCheck(int key)

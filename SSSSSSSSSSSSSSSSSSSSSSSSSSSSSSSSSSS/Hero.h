@@ -12,6 +12,8 @@ private:
 	float hy;
 	float lx;
 	float ly;
+	float h = 35;
+	float w = 35;
 
 public:
 
@@ -40,6 +42,16 @@ public:
 		window.draw(spriteHead);
 		spriteLegs.setPosition(lx, ly);
 		window.draw(spriteLegs);
+	}
+
+	void Down(int key)
+	{ 
+		if (key == 2)
+		{
+			hx = lx - w;
+			hy = ly;
+		}
+		else if(key==3) { Null(); }
 	}
 
 	float GetX() { return hx; }

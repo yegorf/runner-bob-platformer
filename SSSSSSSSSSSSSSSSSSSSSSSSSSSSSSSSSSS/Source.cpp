@@ -20,10 +20,11 @@ using namespace std;
 int key=0;
 bool loose = false;
 
+int speed = 0;
 int tBar = 100;
 int barTime = tBar;
 int tCloud = 150;
-int cloudTime = tCloud;
+int cloudTimee = tCloud;
 
 Game *game;
 
@@ -33,6 +34,7 @@ void Tick()
 	int var = rand()%3;
 	int vartime = rand() % 4;
 
+
 	if(barTime== tBar)
 	{
 		game->AddBarrier(var);
@@ -40,20 +42,21 @@ void Tick()
 		switch (vartime)
 		{
 		case 0:
-			tBar = 50;
+			tBar = 50-speed;
 			break;
 		case 1:
-			tBar = 75;
+			tBar = 75 - speed;
 			break;
 		case 2:
-			tBar = 100;
+			tBar = 100 - speed;
 			break;
 		case 3:
-			tBar = 125;
+			tBar = 125 - speed;
 			break;
 		}
 	}
 	game->CheckEnd();
+	game->HeroDown(key);
 	game->HeroJump(key);
 	game->MoveAll();
 	barTime++;
@@ -61,25 +64,61 @@ void Tick()
 
 }
 
-void CloudTick()
+bool step = false;
+void StepTick(Sprite &spriteLegs, int key)
 {
-	
-	if (cloudTime == tCloud)
+	if (key != 2)
+	{
+		if (!step)
+		{
+			spriteLegs.setTextureRect(IntRect(0, 35, 35, 35));
+			step = true;
+		}
+		else
+		{
+			spriteLegs.setTextureRect(IntRect(0, 70, 35, 35));
+			step = false;
+		}
+	}
+	else
+	{
+		if (!step)
+		{
+			spriteLegs.setTextureRect(IntRect(35, 35, 35, 35));
+			step = true;
+		}
+		else
+		{
+			spriteLegs.setTextureRect(IntRect(35, 70, 35, 35));
+			step = false;
+		}
+	}
+}
+
+
+
+void CloudTick(Sprite &spriteLegs)
+{
+
+	if (cloudTimee == tCloud)
 	{
 		game->AddBarrier(3);
-		cloudTime = 0;
+		cloudTimee = 0;
 		game->Faster();
+		if(speed<10)
+		speed += 1;
 	}
-	cloudTime++;
+	cloudTimee++;
 }
 
 
 int main()
 {
 	srand(time(0));
-	RenderWindow window(VideoMode(screen.GetW(), screen.GetH()), "Runner");
+	RenderWindow window(VideoMode(screen.GetW(), screen.GetH()), "Runner Bob");
 	game = new Game();
 	unsigned maxScore = 0;
+	bool step = false;;
 
 	Font font;
 	font.loadFromFile("a_Alterna.ttf");
@@ -99,6 +138,10 @@ int main()
 	Clock clockCloud;
 	float timerCloud = 0;
 	float delayCloud = 0.02;
+
+	Clock clockStep;
+	float timerStep = 0;
+	float delayStep = 0.1;
 	
 
 	Texture t1;
@@ -108,12 +151,15 @@ int main()
 	Sprite spriteWeed(t1);
 	Sprite spriteSky(sky);
 
-	Texture head;
-	Texture legs;
+	Texture head;	
 	head.loadFromFile("images/head.bmp");
-	legs.loadFromFile("images/legs.bmp");
 	Sprite spriteHead(head);
+	spriteHead.setTextureRect(IntRect(0, 0, 35, 35));
+
+	Texture legs;
+	legs.loadFromFile("images/legs.bmp");
 	Sprite spriteLegs(legs);
+	spriteLegs.setTextureRect(IntRect(0, 0, 35, 35));
 
 	Texture tbird;
 	tbird.loadFromFile("images/bird.bmp");
@@ -141,6 +187,9 @@ int main()
 		clockCloud.restart();
 		timerCloud += cloudTime;
 
+		float stepTime = clockStep.getElapsedTime().asSeconds();
+		clockStep.restart();
+		timerStep += stepTime;
 
 
 		Event event;
@@ -150,13 +199,28 @@ int main()
 				window.close();
 		}
 
+		if (event.key.code == sf::Keyboard::Down)
+		{
+			if (event.type == sf::Event::KeyPressed) 
+			{ 
+				key = 2; 	
+				spriteHead.setTextureRect(IntRect(35, 0, 35, 35));
+			}
+
+			else if (event.type == sf::Event::KeyReleased) 
+			{ 
+				key = 3;
+				spriteHead.setTextureRect(IntRect(0, 0, 35, 35));
+			}
+		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Up)) key = 1;
-		if (Keyboard::isKeyPressed(Keyboard::Down)) key = 2;
+
 
 
 		if (timer > delay) { timer = 0; Tick(); }
-		if (timerCloud > delayCloud) { timerCloud = 0; CloudTick(); }
+		if (timerCloud > delayCloud) { timerCloud = 0; CloudTick(spriteLegs); }
+		if (timerStep > delayStep) { timerStep = 0; StepTick(spriteLegs, key); }
 
 		if (loose)
 		{
@@ -164,6 +228,7 @@ int main()
 			delete game;
 			Sleep(1000);
 			game = new Game;
+			speed = 0;
 		}
 
 		//DRAW
