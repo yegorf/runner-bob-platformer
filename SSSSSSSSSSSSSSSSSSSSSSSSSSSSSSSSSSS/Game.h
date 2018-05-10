@@ -156,22 +156,21 @@ public:
 
 	void HeroJump(int &key)
 	{
-
-		if (!jumpCheck && key == 1 && hero.GetHY() > 12 * Scale)
-		{
-			hero.MoveHero(jumptemp);
-			if (hero.GetHY() <= 12 * Scale) { jumpCheck = true;}
-		}
-
-		else if (jumpCheck && hero.GetLY() < (screen.GetM()-2)*Scale)
-		{
-			hero.MoveHero(-jumptemp);
-			if (hero.GetLY() >= (screen.GetM() - 2)*Scale)
+			if (!jumpCheck && key == 1 && hero.GetHY() > 12 * Scale)
 			{
-				jumpCheck = false;
-				key = 0;
+				hero.MoveHero(jumptemp);
+				if (hero.GetHY() <= 12 * Scale) { jumpCheck = true; }
 			}
-		}
+
+			else if (jumpCheck && hero.GetLY() < (screen.GetM() - 2)*Scale)
+			{
+				hero.MoveHero(-jumptemp);
+				if (hero.GetLY() >= (screen.GetM() - 2)*Scale)
+				{
+					jumpCheck = false;
+					key = 0;
+				}
+			}
 	}
 
 	void HeroDown(int key)

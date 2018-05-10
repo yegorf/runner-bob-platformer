@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 #include "Screen.h"
-#include "Cell.h"
 using namespace sf;
 int scale = 35;
 

@@ -2,21 +2,19 @@
 #include <Windows.h>
 #include <iostream>
 #include "Screen.h"
-#include "Cell.h"
 #include "Hero.h"
 #include "Bird.h"
 #include "Mob.h"
-#include "Queue.h"
 #include "Cloud.h"
 #include "Tree.h"
 #include "Game.h"
 #include <time.h>
 #include <string>
 #include <sstream>
+#include "Menu.h"
 using namespace sf;
 using namespace std;
 
-#define scale 35
 int key=0;
 bool loose = false;
 
@@ -28,12 +26,13 @@ int cloudTimee = tCloud;
 
 Game *game;
 
+
+
 void Tick()
 {
 	loose = game->LooseCheck(key);
 	int var = rand()%3;
 	int vartime = rand() % 4;
-
 
 	if(barTime== tBar)
 	{
@@ -95,11 +94,8 @@ void StepTick(Sprite &spriteLegs, int key)
 	}
 }
 
-
-
 void CloudTick(Sprite &spriteLegs)
 {
-
 	if (cloudTimee == tCloud)
 	{
 		game->AddBarrier(3);
@@ -111,25 +107,41 @@ void CloudTick(Sprite &spriteLegs)
 	cloudTimee++;
 }
 
+void SetText(Text &text, int x, int y)
+{
+	text.setColor(Color::Black);
+	text.setPosition(x, y);
+}
+
+void PrintScore(Text &text, string word, RenderWindow &window, int Score)
+{
+	ostringstream score;
+	score << Score;
+	text.setString(word + score.str());
+	window.draw(text);
+}
 
 int main()
 {
 	srand(time(0));
 	RenderWindow window(VideoMode(screen.GetW(), screen.GetH()), "Runner Bob");
+	Menu menu;
+
+	A:
+	menu.menu(window);
 	game = new Game();
 	unsigned maxScore = 0;
-	bool step = false;;
 
 	Font font;
 	font.loadFromFile("a_Alterna.ttf");
 	Text textScore("", font, 20);
-	textScore.setColor(Color::Black);
-	textScore.setPosition(100, 20);
-
+	SetText(textScore, 100, 20);
 	Text textMaxScore("", font, 20);
-	textMaxScore.setColor(Color::Black);
-	textMaxScore.setPosition(400, 20);
+	SetText(textMaxScore, 400, 20);
 
+	Text escape("", font, 20);
+	SetText(escape, 800, 20);
+	escape.setString("Press esc for exit");
 
 	Clock clockMove;
 	float timer = 0;
@@ -143,7 +155,6 @@ int main()
 	float timerStep = 0;
 	float delayStep = 0.1;
 	
-
 	Texture t1;
 	Texture sky;
 	t1.loadFromFile("images/weed.bmp");
@@ -191,13 +202,17 @@ int main()
 		clockStep.restart();
 		timerStep += stepTime;
 
-
 		Event event;
 		while (window.pollEvent(event))
 		{
 			if (event.type == Event::Closed)
 				window.close();
 		}
+
+
+		if (Keyboard::isKeyPressed(Keyboard::Up)) key = 1;
+
+		if (Keyboard::isKeyPressed(Keyboard::Escape)) { delete game; goto A; };
 
 		if (event.key.code == sf::Keyboard::Down)
 		{
@@ -213,10 +228,6 @@ int main()
 				spriteHead.setTextureRect(IntRect(0, 0, 35, 35));
 			}
 		}
-
-		if (Keyboard::isKeyPressed(Keyboard::Up)) key = 1;
-
-
 
 		if (timer > delay) { timer = 0; Tick(); }
 		if (timerCloud > delayCloud) { timerCloud = 0; CloudTick(spriteLegs); }
@@ -246,19 +257,10 @@ int main()
 		}
 
 		game->DrawAll(spriteHead, spriteLegs, spriteMob, spriteTree, spriteBird, spriteCloud, window);
-		
-		ostringstream score;
-		score << game->GetScore();
-		textScore.setString("Current score: " + score.str());
-		window.draw(textScore);
-
-		ostringstream max_score;
-		max_score << maxScore;
-		textMaxScore.setString("Max score: " + max_score.str());
-		window.draw(textMaxScore);
+		PrintScore(textScore, "Current score: ", window, game->GetScore());
+		PrintScore(textMaxScore, "Max score: ", window, maxScore);
+		window.draw(escape);
 
 		window.display();
 	}
-
-	return 0;
 }

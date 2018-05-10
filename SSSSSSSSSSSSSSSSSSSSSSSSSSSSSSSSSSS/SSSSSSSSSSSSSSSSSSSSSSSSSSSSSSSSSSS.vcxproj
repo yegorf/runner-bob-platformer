@@ -141,8 +141,8 @@
   <ItemGroup>
     <ClInclude Include="Barrier.h" />
     <ClInclude Include="Bird.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Mob.h" />
-    <ClInclude Include="Cell.h" />
     <ClInclude Include="Cloud.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Hero.h" />
