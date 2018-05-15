@@ -1,12 +1,15 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 #include "Screen.h"
+#include <string>
 using namespace sf;
-int Scale = 35;
+using namespace std;
 
 class Barrier
 {
 protected:
+	Texture texture;
+	Sprite sprite;
 	float x;
 	float y;
 	float h;
@@ -23,8 +26,13 @@ public:
 	float GetH() { return h; }
 	float GetW() { return w; }
 
-	virtual void Null() = 0;
-	virtual void Draw(Sprite, RenderWindow&) = 0;
-	virtual void Move(float temp) = 0;
+	void SetTexture(string path)
+	{
+		texture.loadFromFile(path);
+		sprite.setTexture(texture);
+	}
 
+	virtual void Null() = 0;
+	virtual void Draw(RenderWindow&) = 0;
+	virtual void Move(float temp) = 0;
 };

@@ -2,7 +2,6 @@
 #include <SFML\Graphics.hpp>
 #include "Screen.h"
 using namespace sf;
-int scale = 35;
 
 class Hero
 {
@@ -23,7 +22,7 @@ public:
 
 	void Null()
 	{
-		hx = scale;
+		hx = h;
 		hy = (screen.GetM() - 3)*screen.GetScale();
 		lx = screen.GetScale();
 		ly = (screen.GetM() - 2)*screen.GetScale();

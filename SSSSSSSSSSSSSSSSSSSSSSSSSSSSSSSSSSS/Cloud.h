@@ -1,10 +1,11 @@
 #pragma once
 #include "Barrier.h"
 
-bool hh = false;
 class Cloud: public Barrier
 {
 public:
+
+	static bool H;
 
 	Cloud()
 	{
@@ -15,15 +16,15 @@ public:
 	void Null()
 	{
 		x = screen.GetW();
-		if (!h)
+		if (!H)
 		{
-			y = 5 * Scale;
-			h = true;
+			y = 175;
+			H = true;
 		}
 		else
 		{
-			y = 2 * Scale;
-			h = false;
+			y = 70;
+			H = false;
 		}
 	}
 
@@ -32,10 +33,11 @@ public:
 		x -= temp;
 	}
 
-	void Draw(Sprite spriteCloud, RenderWindow &window)
+	void Draw(RenderWindow &window)
 	{
-		spriteCloud.setPosition(x, y);
-		window.draw(spriteCloud);
+		sprite.setPosition(x, y);
+		window.draw(sprite);
 	}
 
 };
+bool Cloud::H = false;

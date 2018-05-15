@@ -1,12 +1,11 @@
 #pragma once
 
-
 class Game
 {
 private:
 	double mobSpeed = 9;
 	double cloudSpeed = 2.5;
-	float jumptemp = 9;
+	float jumpSpeed = 9;
 	bool jumpCheck = false;
 
 	Hero hero;
@@ -34,6 +33,7 @@ public:
 		birds = new Bird[birdCol];
 		mobs = new Mob[mobCol];
 		trees = new Tree[mobCol];
+		SetAllTextures();
 	}
 
 	~Game()
@@ -48,6 +48,16 @@ public:
 	void SetScore(unsigned s) { score = s; }
 	unsigned GetScore() { return score; }
 
+	void SetAllTextures()
+	{
+		for (int i = 0; i < mobCol; i++)
+		{
+			birds[i].SetTexture("images/bird.bmp");
+			clouds[i].SetTexture("images/cloud.bmp");
+			mobs[i].SetTexture("images/mob.bmp");
+			trees[i].SetTexture("images/tree.bmp");
+		}
+	}
 
 	void MoveAll()
 	{
@@ -87,19 +97,19 @@ public:
 		}
 	}
 
-	void DrawAll(Sprite sHead, Sprite sLegs, Sprite s_mob, Sprite sTree, Sprite s_bird, Sprite s_cloud, RenderWindow &window)
+	void DrawAll(Sprite sHead, Sprite sLegs, RenderWindow &window)
 	{
 		hero.Draw(sHead, sLegs, window);
 		for (int i = 0; i < mobCol; i++)
 		{
 			if(mobs[i].GetUse())
-			mobs[i].Draw(s_mob, window);
+			mobs[i].Draw(window);
 			if (trees[i].GetUse())
-				trees[i].Draw(sTree, window);
+				trees[i].Draw(window);
 			if (birds[i].GetUse())
-			birds[i].Draw(s_bird, window);
+			birds[i].Draw(window);
 			if (clouds[i].GetUse())
-			clouds[i].Draw(s_cloud, window);
+			clouds[i].Draw(window);
 		}
 	}
 
@@ -156,16 +166,16 @@ public:
 
 	void HeroJump(int &key)
 	{
-			if (!jumpCheck && key == 1 && hero.GetHY() > 12 * Scale)
+			if (!jumpCheck && key == 1 && hero.GetHY() > 420)
 			{
-				hero.MoveHero(jumptemp);
-				if (hero.GetHY() <= 12 * Scale) { jumpCheck = true; }
+				hero.MoveHero(jumpSpeed);
+				if (hero.GetHY() <= 420) { jumpCheck = true; }
 			}
 
-			else if (jumpCheck && hero.GetLY() < (screen.GetM() - 2)*Scale)
+			else if (jumpCheck && hero.GetLY() < (screen.GetM() - 2)*35)
 			{
-				hero.MoveHero(-jumptemp);
-				if (hero.GetLY() >= (screen.GetM() - 2)*Scale)
+				hero.MoveHero(-jumpSpeed);
+				if (hero.GetLY() >= (screen.GetM() - 2)*35)
 				{
 					jumpCheck = false;
 					key = 0;
@@ -192,5 +202,4 @@ public:
 		}
 		return false;
 	}
-
 };

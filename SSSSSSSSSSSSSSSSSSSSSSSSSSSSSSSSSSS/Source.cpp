@@ -1,4 +1,5 @@
 #include <SFML\Graphics.hpp>
+#include <SFML\Audio.hpp>
 #include <Windows.h>
 #include <iostream>
 #include "Screen.h"
@@ -169,22 +170,6 @@ int main()
 	Sprite spriteLegs(legs);
 	spriteLegs.setTextureRect(IntRect(0, 0, 35, 35));
 
-	Texture tbird;
-	tbird.loadFromFile("images/bird.bmp");
-	Sprite spriteBird(tbird);
-
-	Texture tmob;
-	tmob.loadFromFile("images/mob.bmp");
-	Sprite spriteMob(tmob);
-
-	Texture ttree;
-	ttree.loadFromFile("images/tree.bmp");
-	Sprite spriteTree(ttree);
-
-	Texture tcloud;
-	tcloud.loadFromFile("images/cloud.bmp");
-	Sprite spriteCloud(tcloud);
-
 	while (window.isOpen())
 	{
 		float time = clockMove.getElapsedTime().asSeconds();
@@ -206,9 +191,7 @@ int main()
 				window.close();
 		}
 
-
 		if (Keyboard::isKeyPressed(Keyboard::Up)) key = 1;
-
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) { delete game; goto A; };
 
 		if (event.key.code == sf::Keyboard::Down)
@@ -239,7 +222,6 @@ int main()
 			speed = 0;
 		}
 
-		//DRAW
 		window.clear();
 
 		for (int i = 0; i < screen.GetN(); i++)
@@ -253,7 +235,7 @@ int main()
 			}
 		}
 
-		game->DrawAll(spriteHead, spriteLegs, spriteMob, spriteTree, spriteBird, spriteCloud, window);
+		game->DrawAll(spriteHead, spriteLegs, window);
 		PrintScore(textScore, "Current score: ", window, game->GetScore());
 		PrintScore(textMaxScore, "Max score: ", window, maxScore);
 		window.draw(escape);

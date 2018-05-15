@@ -6,7 +6,7 @@ class Bird: public Barrier
 public:
 
 	Bird()
-	{		
+	{
 		h = 35;
 		w = 35;
 		Null();
@@ -14,14 +14,14 @@ public:
 
 	void Null()
 	{
-		x = 29 * Scale;
-		y = 17 * Scale;
+		x = 29 * w;
+		y = 17 * w;
 	}
 
-	void Draw(Sprite spriteBird, RenderWindow &window)
+	void Draw(RenderWindow &window)
 	{
-		spriteBird.setPosition(x, y);
-		window.draw(spriteBird);
+		sprite.setPosition(x, y);
+		window.draw(sprite);
 	}
 
 	void Move(float temp)
@@ -32,13 +32,19 @@ public:
 	bool Loose(Hero h, int key)
 	{
 		if (
-			x <= h.GetX() + Scale
-			&& x + Scale >= h.GetX()
-			&& y - Scale <= h.GetLY()
+			x <= h.GetX() + w
+			&& x + w >= h.GetX()
+			&& y - w <= h.GetLY()
 			&& key!=2)
 			return true;
 		else return false;
 	}
+
+	//void SetTexture()
+	//{
+	//	texture.loadFromFile("images/bird.bmp");
+	//	sprite.setTexture(texture);
+	//}
 
 };
 

@@ -14,8 +14,8 @@ public:
 
 	void Null()
 	{
-		x = 29 * Scale;
-		y = 18 * Scale;
+		x = 29 * w;
+		y = 18 * w;
 	}
 
 	void Move(float temp)
@@ -23,18 +23,18 @@ public:
 		x -= temp;
 	}
 
-	void Draw(Sprite spriteMob, RenderWindow &window)
+	void Draw(RenderWindow &window)
 	{
-		spriteMob.setPosition(x, y);
-		window.draw(spriteMob);
+		sprite.setPosition(x, y);
+		window.draw(sprite);
 	}
 
 	bool Loose(Hero h)
 	{
 		if (
-			x <= h.GetX() + Scale
-			&& x + Scale >= h.GetX()
-			&& y - Scale <= h.GetLY())
+			x <= h.GetX() + w
+			&& x + w >= h.GetX()
+			&& y - w <= h.GetLY())
 			return true;
 		else return false;
 	}

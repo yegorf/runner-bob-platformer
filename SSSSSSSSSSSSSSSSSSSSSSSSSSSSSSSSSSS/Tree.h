@@ -14,8 +14,8 @@ public:
 
 	void Null()
 	{
-		x = 29 * Scale;
-		y = 17 * Scale;
+		x = 29 * w;
+		y = 17 * w;
 	}
 
 	void Move(float temp)
@@ -23,10 +23,10 @@ public:
 		x -= temp;
 	}
 
-	void Draw(Sprite spriteMob, RenderWindow &window)
+	void Draw(RenderWindow &window)
 	{
-		spriteMob.setPosition(x, y);
-		window.draw(spriteMob);
+		sprite.setPosition(x, y);
+		window.draw(sprite);
 	}
 
 	bool Loose(Hero hero)
