@@ -1,5 +1,4 @@
 #include <SFML\Graphics.hpp>
-#include <SFML\Audio.hpp>
 #include <Windows.h>
 #include <iostream>
 #include "Screen.h"
@@ -13,10 +12,12 @@
 #include <string>
 #include <sstream>
 #include "Menu.h"
+#include "ScoreTable.h"
 using namespace sf;
 using namespace std;
 
 Game *game;
+ScoreTable *table;
 int key=0;
 bool loose = false;
 
@@ -119,6 +120,8 @@ void PrintScore(Text &text, string word, RenderWindow &window, int Score)
 	window.draw(text);
 }
 
+
+
 int main()
 {
 	srand(time(0));
@@ -184,15 +187,36 @@ int main()
 		clockStep.restart();
 		timerStep += stepTime;
 
+		string str;
 		Event event;
+
+		Text ttext("", font, 20);
+		SetText(ttext, 300, 300);
+
 		while (window.pollEvent(event))
 		{
 			if (event.type == Event::Closed)
 				window.close();
+
+			if (event.type == sf::Event::TextEntered)
+			{
+				if (event.text.unicode < 128)
+				{
+					str += static_cast<char>(event.text.unicode);
+					ttext.setString(str);
+				}
+			}
 		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Up)) key = 1;
-		if (Keyboard::isKeyPressed(Keyboard::Escape)) { delete game; goto A; };
+		if (Keyboard::isKeyPressed(Keyboard::Escape)) 
+		{ 
+			table = new ScoreTable;
+			table->AddEntry(maxScore, "Sashka");
+			delete table;
+			delete game;
+			goto A; 
+		};
 
 		if (event.key.code == sf::Keyboard::Down)
 		{
@@ -241,5 +265,6 @@ int main()
 		window.draw(escape);
 
 		window.display();
+
 	}
 }

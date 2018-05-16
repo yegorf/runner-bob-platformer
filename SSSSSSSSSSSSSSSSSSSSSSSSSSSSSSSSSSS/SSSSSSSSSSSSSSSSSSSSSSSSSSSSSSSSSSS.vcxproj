@@ -141,11 +141,13 @@
   <ItemGroup>
     <ClInclude Include="Barrier.h" />
     <ClInclude Include="Bird.h" />
+    <ClInclude Include="Entry.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Mob.h" />
     <ClInclude Include="Cloud.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Hero.h" />
+    <ClInclude Include="ScoreTable.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Tree.h" />
   </ItemGroup>

@@ -1,5 +1,5 @@
 #pragma once
-
+#include "ScoreTable.h"
 
 class Menu
 {
@@ -60,13 +60,22 @@ public:
 		}
 	}
 
-	void Result()
+	void Result(RenderWindow &window)
 	{
 		if (Mouse::isButtonPressed(Mouse::Left))
 		{
 			if (num == 1) { use = false; }
-			if (num == 2) { Sleep(1000); }
-			if (num == 3) { Sleep(1000); }
+			if (num == 2) 
+			{ 
+				ScoreTable t;
+				t.GetFile();
+				t.ShowTable(window);
+			}
+			if (num == 3) 
+			{  
+				ScoreTable t;
+				t.About(window);
+			}
 			if (num == 4) { exit(0); }
 		}
 	}
@@ -93,7 +102,7 @@ public:
 			window.clear(Color(10, 250, 100));
 
 			ButtonClick(window);
-			Result();
+			Result(window);
 			DrawButtons(window);
 
 			window.draw(st);
