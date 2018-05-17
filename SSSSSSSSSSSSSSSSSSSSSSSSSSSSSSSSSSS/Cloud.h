@@ -5,7 +5,7 @@ class Cloud: public Barrier
 {
 public:
 
-	static bool H;
+	static bool height;
 
 	Cloud()
 	{
@@ -16,15 +16,15 @@ public:
 	void Null()
 	{
 		x = screen.GetW();
-		if (!H)
+		if (!height)
 		{
 			y = 175;
-			H = true;
+			height = true;
 		}
 		else
 		{
 			y = 70;
-			H = false;
+			height = false;
 		}
 	}
 
@@ -40,4 +40,4 @@ public:
 	}
 
 };
-bool Cloud::H = false;
+bool Cloud::height = false;

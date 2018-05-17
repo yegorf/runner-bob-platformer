@@ -1,9 +1,28 @@
 #pragma once
+#include <SFML\Graphics.hpp>
+#include <Windows.h>
+#include <iostream>
+#include "Hero.h"
+#include "Bird.h"
+#include "Mob.h"
+#include "Cloud.h"
+#include "Tree.h"
+#include "Game.h"
+#include <time.h>
+#include <string>
+#include <sstream>
+#include "Menu.h"
+#include "ScoreTable.h"
+#include "Screen.h"
+#include "GAME.h"
+using namespace sf;
+using namespace std;
 
 
-class Game
+class GAME
 {
 public:
+	Game *game;
 	ScoreTable *table;
 	int key = 0;
 
@@ -12,7 +31,7 @@ public:
 	int tCloud = 150;
 	int cloudTimee = tCloud;
 
-	void Tick(Round *game)
+	void Tick()
 	{
 		game->LooseCheck(key);
 
@@ -78,7 +97,7 @@ public:
 		}
 	}
 
-	void CloudTick(Round *game, Sprite &spriteLegs)
+	void CloudTick(Sprite &spriteLegs)
 	{
 		if (cloudTimee == tCloud)
 		{

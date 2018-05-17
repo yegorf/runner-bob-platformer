@@ -10,7 +10,6 @@ private:
 	Entry *mas;
 
 public:
-
 	ScoreTable()
 	{
 		col = FileCol();

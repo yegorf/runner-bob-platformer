@@ -23,9 +23,9 @@ public:
 	void Null()
 	{
 		hx = h;
-		hy = (screen.GetM() - 3)*screen.GetScale();
-		lx = screen.GetScale();
-		ly = (screen.GetM() - 2)*screen.GetScale();
+		hy = screen.GetH() - 105;
+		lx = 35;
+		ly = screen.GetH() - 70;
 	}
 
 	void MoveHero(float temp)
